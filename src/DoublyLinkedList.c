@@ -139,12 +139,66 @@ int popValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList)
 
 int insertValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int index, int value)
 {
+	if (index > doublyLinkedList->length)
+		terminate("Attempt to insert value at an index out of bounds\n");
 
+	DoublyLinkedListNode *newNode = malloc(sizeof(DoublyLinkedListNode));
+	if (!newNode)
+		return 0;
+	newNode->value = value;
+	newNode->previous = NULL;
+	newNode->next = NULL;
+
+	if (doublyLinkedList->length == 0)
+	{
+		doublyLinkedList->head = newNode;
+		doublyLinkedList->tail = newNode;
+	}
+	else
+	{
+		if (index == 0)
+		{
+			newNode->next = doublyLinkedList->head;
+			doublyLinkedList->head->previous = newNode;
+			doublyLinkedList->head = newNode;
+		}
+		else if (index == doublyLinkedList->length)
+		{
+			doublyLinkedList->tail->next = newNode;
+			newNode->previous = doublyLinkedList->tail;
+			doublyLinkedList->tail = newNode;
+		}
+		else
+		{
+			DoublyLinkedListNode *targetNode;
+			int midpoint = (doublyLinkedList->length + 1)/2;
+			if (index < midpoint)
+			{
+				targetNode = doublyLinkedList->head;
+				for (unsigned int counter = 0; counter < index - 1; counter++)
+					targetNode = targetNode->next;
+			}
+			else
+			{
+				targetNode = doublyLinkedList->tail;
+				for (unsigned int counter = doublyLinkedList->length; counter > index + 1; counter--)
+					targetNode = targetNode->previous;
+			}
+
+			newNode->next = targetNode->next;
+			targetNode->next->previous = newNode;
+			targetNode->next = newNode;
+			newNode->previous = targetNode;
+		}
+	}
+
+	doublyLinkedList->length++;
+	return 1;
 }
 
 int removeValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int index)
 {
-
+	
 }
 
 /* Doubly Linked List Functions */
