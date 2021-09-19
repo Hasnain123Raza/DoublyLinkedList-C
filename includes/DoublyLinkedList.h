@@ -1,6 +1,9 @@
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef struct DoublyLinkedListNode {
 	int value;
 	DoublyLinkedListNode *previous;
