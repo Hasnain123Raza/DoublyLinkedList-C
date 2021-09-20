@@ -1,0 +1,15 @@
+name: driver-action
+on: [push]
+jobs:
+        run-driver:
+                name: Run Driver
+                runs-on: ubuntu-latest
+                steps:
+                        - name: Download Repository
+                          uses: actions/checkout@v2
+
+                        - name: Make the Driver
+                          run: make driver
+
+                        - name: Run the Driver
+                          run: bin/driver
