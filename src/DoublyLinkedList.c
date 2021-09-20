@@ -119,7 +119,7 @@ int popValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList)
 
 	DoublyLinkedListNode *tailNode = doublyLinkedList->tail;
 
-	if (singlyLinkedList->length == 1)
+	if (doublyLinkedList->length == 1)
 	{
 		doublyLinkedList->head = NULL;
 		doublyLinkedList->tail = NULL;
@@ -220,11 +220,11 @@ int removeValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int
 			doublyLinkedList->head = targetNode->next;
 			doublyLinkedList->head->previous = NULL;
 		}
-		else if (index == doublyLinkedList->length)
+		else if (index == doublyLinkedList->length - 1)
 		{
 			targetNode = doublyLinkedList->tail;
 			doublyLinkedList->tail = targetNode->previous;
-			doublyLinkedList->next = NULL;
+			doublyLinkedList->tail->next = NULL;
 		}
 		else
 		{
@@ -272,7 +272,7 @@ DoublyLinkedListNode *getNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList
 	else
 	{
 		currentNode = doublyLinkedList->tail;
-		for (int counter = doublyLinkedList->length; counter > index; counter--)
+		for (int counter = doublyLinkedList->length - 1; counter > index; counter--)
 			currentNode = currentNode->previous;
 	}
 
@@ -288,10 +288,13 @@ int addValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Doubly
 	newNode->previous = NULL;
 	newNode->next = NULL;
 
+	if (node == doublyLinkedList->tail)
+		doublyLinkedList->tail = newNode;
 	newNode->next = node->next;
 	newNode->previous = node;
 	node->next = newNode;
 
+	doublyLinkedList->length++;
 	return 1;
 }
 
@@ -302,7 +305,7 @@ int removeValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Dou
 
 	DoublyLinkedListNode *targetNode = node->next;
 	node->next = targetNode->next;
-	if (doublyLinkedList->tail == targetNode)
+	if (targetNode == doublyLinkedList->tail)
 		doublyLinkedList->tail = node;
 	else
 		node->next->previous = node;
@@ -322,10 +325,13 @@ int addValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Doubl
 	newNode->previous = NULL;
 	newNode->next = NULL;
 
+	if (node == doublyLinkedList->head)
+		doublyLinkedList->head = newNode;
 	newNode->previous = node->previous;
 	newNode->next = node;
 	node->previous = newNode;
 
+	doublyLinkedList->length++;
 	return 1;
 }
 
@@ -336,7 +342,7 @@ int removeValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Do
 
 	DoublyLinkedListNode *targetNode = node->previous;
 	node->previous = targetNode->previous;
-	if (doublyLinkedList->head == targetNode)
+	if (targetNode == doublyLinkedList->head)
 		doublyLinkedList->head = node;
 	else
 		node->previous->next = node;

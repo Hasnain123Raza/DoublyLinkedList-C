@@ -6,8 +6,8 @@
 
 typedef struct DoublyLinkedListNode {
 	int value;
-	DoublyLinkedListNode *previous;
-	DoublyLinkedListNode *next;
+	struct DoublyLinkedListNode *previous;
+	struct DoublyLinkedListNode *next;
 } DoublyLinkedListNode;
 
 typedef struct {
