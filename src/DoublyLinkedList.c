@@ -198,7 +198,59 @@ int insertValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int
 
 int removeValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int index)
 {
-	
+	if (doublyLinkedList->length == 0)
+		terminate("Attempt to remove value from an empty list\n");
+
+	if (index >= doublyLinkedList->length)
+		terminate("Attempt to remove value at an index out of bounds\n");
+
+	DoublyLinkedListNode *targetNode;
+
+	if (doublyLinkedList->length == 1)
+	{
+		targetNode = doublyLinkedList->head;
+		doublyLinkedList->head = NULL;
+		doublyLinkedList->tail = NULL;
+	}
+	else
+	{
+		if (index == 0)
+		{
+			targetNode = doublyLinkedList->head;
+			doublyLinkedList->head = targetNode->next;
+			doublyLinkedList->head->previous = NULL;
+		}
+		else if (index == doublyLinkedList->length)
+		{
+			targetNode = doublyLinkedList->tail;
+			doublyLinkedList->tail = targetNode->previous;
+			doublyLinkedList->next = NULL;
+		}
+		else
+		{
+			int midpoint = (doublyLinkedList->length + 1)/2;
+			if (index < midpoint)
+			{
+				targetNode = doublyLinkedList->head;
+				for (unsigned int counter = 0; counter < index; counter++)
+					targetNode = targetNode->next;
+			}
+			else
+			{
+				targetNode = doublyLinkedList->tail;
+				for (unsigned int counter = doublyLinkedList->length; counter > index; counter--)
+					targetNode = targetNode->previous;
+			}
+
+			targetNode->previous->next = targetNode->next;
+			targetNode->next->previous = targetNode->previous;
+		}
+	}
+
+	int targetValue = targetNode->value;
+	free(targetNode);
+	doublyLinkedList->length--;
+	return targetValue;
 }
 
 /* Doubly Linked List Functions */
@@ -206,12 +258,41 @@ int removeValueDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int
 
 DoublyLinkedListNode *getNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, unsigned int index)
 {
+	if (index >= doublyLinkedList->length)
+		terminate("Attempt to get node at an index out of bounds\n");
 
+	DoublyLinkedListNode *currentNode;
+	int midpoint = (doublyLinkedList->length + 1)/2;
+	if (index < midpoint)
+	{
+		currentNode = doublyLinkedList->head;
+		for (int counter = 0; counter < index; counter++)
+			currentNode = currentNode->next;
+	}
+	else
+	{
+		currentNode = doublyLinkedList->tail;
+		for (int counter = doublyLinkedList->length; counter > index; counter--)
+			currentNode = currentNode->previous;
+	}
+
+	return currentNode;
 }
 
 int addValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node, int value)
 {
+	DoublyLinkedListNode *newNode = malloc(sizeof(DoublyLinkedListNode));
+	if (!newNode)
+		return 0;
+	newNode->value = value;
+	newNode->previous = NULL;
+	newNode->next = NULL;
 
+	newNode->next = node->next;
+	newNode->previous = node;
+	node->next = newNode;
+
+	return 1;
 }
 
 int removeValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node)
@@ -221,7 +302,18 @@ int removeValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Dou
 
 int addValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node, int value)
 {
+	DoublyLinkedListNode *newNode = malloc(sizeof(DoublyLinkedListNode));
+	if (!newNode)
+		return 0;
+	newNode->value = value;
+	newNode->previous = NULL;
+	newNode->next = NULL;
 
+	newNode->previous = node->previous;
+	newNode->next = node;
+	node->previous = newNode;
+
+	return 1;
 }
 
 int removeValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node)
