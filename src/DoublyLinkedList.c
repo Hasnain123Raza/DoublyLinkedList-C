@@ -297,7 +297,20 @@ int addValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Doubly
 
 int removeValueAfterNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node)
 {
+	if (node->next == NULL)
+		terminate("Attempt to remove a NULL node\n");
 
+	DoublyLinkedListNode *targetNode = node->next;
+	node->next = targetNode->next;
+	if (doublyLinkedList->tail == targetNode)
+		doublyLinkedList->tail = node;
+	else
+		node->next->previous = node;
+
+	int targetValue = targetNode->value;
+	free(targetNode);
+	doublyLinkedList->length--;
+	return targetValue;
 }
 
 int addValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node, int value)
@@ -318,5 +331,18 @@ int addValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, Doubl
 
 int removeValueBeforeNodeDoublyLinkedList(DoublyLinkedList *doublyLinkedList, DoublyLinkedListNode *node)
 {
+	if (node->previous == NULL)
+		terminate("Attempt to remove a NULL node\n");
 
+	DoublyLinkedListNode *targetNode = node->previous;
+	node->previous = targetNode->previous;
+	if (doublyLinkedList->head == targetNode)
+		doublyLinkedList->head = node;
+	else
+		node->previous->next = node;
+
+	int targetValue = targetNode->value;
+	free(targetNode);
+	doublyLinkedList->length--;
+	return targetValue;
 }
